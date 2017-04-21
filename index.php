@@ -31,14 +31,23 @@ function bootstrap(){
         var_dump('url wrong');exit;
     }
 
-    $match = array();
+    if (!empty($api_conf['map_var']) && !empty($match)) {
+        foreach ($api_conf['map_var'] as $idx => $varname) {
+            if (!isset($match[$idx])) {
+                var_dump('url var');exit;    
+            }
+            $_REQUEST[$varname] = $match[$idx];
+        }
+    }
+
     $_INVOKING_FILE_ = '';
     if(empty($match)){
         $_INVOKING_FILE_ = $api_conf['map_file'];
     }else{
-        $_INVOKING_FILE_ = preg_replace("#$pattern#", $api_conf['map_file'], $script_url);
+        //如果map_file中有用变量符号，需要替换成uri中的实际值。
+        $_INVOKING_FILE_ = preg_replace("#$pattern#", $api_conf['map_file'], $script_uri);
     }
-    
+
     $_INVOKING_FILE_ = __DIR__ . $_INVOKING_FILE_;
     if(!file_exists($_INVOKING_FILE_)){
         var_dump('file not exist');exit;

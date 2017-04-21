@@ -1,7 +1,10 @@
 <?php
-
+$date = $_REQUEST['date'];
 $app_path = dirname(dirname(dirname(__DIR__)));
-$handle = fopen($app_path.'/data/gold/20170421/hour_average', 'r');
+$handle = fopen($app_path."/data/gold/$date/hour_average", 'r');
+
+$date_before = date('Ymd', strtotime($date) - 24*3600);
+$date_after = date('Ymd', strtotime($date) + 24*3600);
 
 $hour = array();
 while($price = fgets($handle)){
@@ -31,6 +34,8 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-35
 </head>
 <body>
 <canvas width="700" height="400" id="canvas"> </canvas>
+<a href="/goldinfo/price/<?php echo $date_before?>">前日金价</a>
+<a href="/goldinfo/price/<?php echo $date_after?>">后日金价</a>
 <script>
 window.onload = function(){
 

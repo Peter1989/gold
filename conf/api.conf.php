@@ -11,10 +11,12 @@ class APIConf{
             ),
             //gold
             '/goldi' => array(
-                '/goldinfo/price' => array(
+                '/goldinfo/price/(\d+)' => array(
                     'access' => array('GET'),
                     'map_file' => '/app/goldinfo/price.php',
-                    'map_var' => array(),
+                    'map_var' => array(
+                        1 => 'date',
+                        ),
                     )
                 )
             );
