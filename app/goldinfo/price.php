@@ -25,7 +25,7 @@ $price_arr .= ']';
 <!Doctype Html>
 <html>
 <head>
-<title>Line Chart Demo</title>
+<title><?php echo $date?></title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <style>
 body{background-color:#bfd0c4;}
