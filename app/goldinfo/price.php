@@ -34,8 +34,9 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-35
 </head>
 <body>
 <canvas width="700" height="400" id="canvas"> </canvas>
-<a href="/goldinfo/price/<?php echo $date_before?>">前日金价</a>
-<a href="/goldinfo/price/<?php echo $date_after?>">后日金价</a>
+<a href="/goldinfo/price/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/goldinfo/price/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <script>
 window.onload = function(){
 
