@@ -35,6 +35,7 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-35
 <body>
 <canvas width="700" height="400" id="canvas"> </canvas>
 <a href="/goldinfo/price/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<?php echo $date?>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/goldinfo/price/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <script>
@@ -66,7 +67,7 @@ window.onload = function(){
      *@param6: 是否是多条数据
      */
     //先定义数据线的名字，再绘制数据
-    LineChart.setKey(["2013","2014"]);
+    LineChart.setKey(["<?php echo $date?>","2014"]);
     LineChart.setData("canvas",multiData,60,"red","#333",true,true);
 }
 
