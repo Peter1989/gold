@@ -1,5 +1,8 @@
 <?php
-$handle = fopen('/home/dongyang/data/gold/20170419/hour_average', 'r');
+
+$app_path = dirname(dirname(dirname(__DIR__)));
+$handle = fopen($app_path.'/data/gold/20170421/hour_average', 'r');
+
 $hour = array();
 while($price = fgets($handle)){
     $index_price = explode(' ', $price);
