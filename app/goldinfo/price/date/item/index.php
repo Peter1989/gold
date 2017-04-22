@@ -1,11 +1,22 @@
 <?php
 $date = $_REQUEST['date'];
-$handle = fopen($_SERVER['HOME']."/mysite/data/gold/$date/hour_average", 'r');
-
 $date_before = date('Ymd', strtotime($date) - 24*3600);
 $date_after = date('Ymd', strtotime($date) + 24*3600);
 
+$home = $_SERVER['HOME'];
+$inform_path = $home.'/mysite/gold/data/goldinfo/price/inform.php';
+$res = require_once($inform_path);
+
+$inform_data = new InformData();
+if(isset($_REQUEST['radio1'])){
+    $status = trim($_REQUEST['radio1']);
+    $inform_data->set_inform_status($status);
+}
+
+$statement = $inform_data->get_inform_statement();
+
 $hour = array();
+$handle = fopen($home."/mysite/data/gold/$date/hour_average", 'r');
 while($price = fgets($handle)){
     $index_price = explode(' ', $price);
     $hour[$index_price[0]] = $index_price[1];
@@ -33,17 +44,29 @@ $min = round(end($hour), 2);
 <style>
 body{background-color:#bfd0c4;}
 a{font-size: 200%;}
+form{font-size: 200%; position:absolute;top:95%;left:50%;margin-left:-450px;margin-top:-300px;}
+span{font-size: 200%; position:absolute;top:100%;left:50%;margin-left:-450px;margin-top:-300px;}
 canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-450px;margin-top:-300px;box-shadow: 3px 3px 3px #7e7a7c;}
 </style>
 </head>
 <body>
-<canvas width="900" height="600" id="canvas">asdf</canvas>
+<canvas width="900" height="600" id="canvas"></canvas>
+<br>
 <a href="/goldinfo/price/date/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a><?php echo $date?></a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/goldinfo/price/date/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
 <a>最大值：<?php echo $max?></a><br>
 <a>最小值：<?php echo $min?></a><br>
+
+<span>当前提醒状态：<?php echo $statement?></span>
+
+<form id="inform" action="" method="get">
+    金价上升提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="1"/>&nbsp;&nbsp;  
+    金价下降提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="0"/>&nbsp;&nbsp;
+    关闭提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="2"/>&nbsp;&nbsp;
+    <input style="width:40px;height:40px" type="submit" value="Submit">提交</input>
+</form>
 <script>
 window.onload = function(){
 
