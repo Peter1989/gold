@@ -6,7 +6,7 @@ if(PHP_SAPI == 'cli'){
     require_once($lib_dir);
 }
 
-class Inform_model{
+class InformModel{
         public function get_last_price(){
             $gold_redis = new Gold_redis();
             $redis = $gold_redis->get_gold_redis();
@@ -25,5 +25,11 @@ class Inform_model{
             $redis = $gold_redis->get_gold_redis();
             $raise_inform = $redis->GET('raise_inform');
             return $raise_inform; 
+        }
+
+        public function set_inform_status($status){
+            $gold_redis = new Gold_redis();
+            $redis = $gold_redis->get_gold_redis();
+            $redis->SET('raise_inform', $status);
         }
 }

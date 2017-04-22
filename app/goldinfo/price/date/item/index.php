@@ -37,11 +37,11 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-45
 </style>
 </head>
 <body>
-<canvas width="900" height="600" id="canvas"> </canvas>
+<canvas width="900" height="600" id="canvas">asdf</canvas>
 <a href="/goldinfo/price/date/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a><?php echo $date?></a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/goldinfo/price/date/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br><br><br>
+<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
 <a>最大值：<?php echo $max?></a><br>
 <a>最小值：<?php echo $min?></a><br>
 <script>
