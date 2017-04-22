@@ -465,4 +465,3 @@ class MySendMail {
         return false;
     }
 }
-
