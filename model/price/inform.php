@@ -1,10 +1,8 @@
 <?php
 
-if(PHP_SAPI == 'cli'){
-    $home = $_SERVER["HOME"];
-    $lib_dir = $home.'/mysite/gold/lib/redis.lib.php';
-    require_once($lib_dir);
-}
+$home = $_SERVER["HOME"];
+$lib_dir = $home.'/mysite/gold/lib/redis.lib.php';
+require_once($lib_dir);
 
 class InformModel{
         public function get_last_price(){

@@ -5,7 +5,7 @@ $date_after = date('Ymd', strtotime($date) + 24*3600);
 
 $home = $_SERVER['HOME'];
 $inform_path = $home.'/mysite/gold/data/goldinfo/price/inform.php';
-require_once($inform_path);
+$res = require_once($inform_path);
 
 $inform_data = new InformData();
 if(isset($_REQUEST['radio1'])){
