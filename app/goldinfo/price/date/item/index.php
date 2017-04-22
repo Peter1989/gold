@@ -49,9 +49,7 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-45
 </style>
 </head>
 <body>
-
 <canvas width="900" height="600" id="canvas"></canvas>
-
 <br>
 <a href="/goldinfo/price/date/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a><?php echo $date?></a>&nbsp;&nbsp;&nbsp;&nbsp;
