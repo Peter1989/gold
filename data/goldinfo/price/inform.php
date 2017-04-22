@@ -22,7 +22,7 @@ class InformData{
                 $statement = '下降提醒';
                 break;
             default:
-                $statement = '状态未知';
+                $statement = '提醒关闭';
                 break;
         }
         return $statement;
