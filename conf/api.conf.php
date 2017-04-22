@@ -11,13 +11,20 @@ class APIConf{
             ),
             //gold
             '/goldi' => array(
-                '/goldinfo/price/(\d+)' => array(
+                '/goldinfo/price/date/(\d+)' => array(
                     'access' => array('GET'),
-                    'map_file' => '/app/goldinfo/price.php',
+                    'map_file' => '/app/goldinfo/price/date/item/index.php',
                     'map_var' => array(
                         1 => 'date',
                         ),
                     )
-                )
+                ),
+            //knowledge
+            'knowle' => array(
+                '/knowledge/update/(\d+)' => array(
+                    'access' => array('POST'),
+                    'map_file' => '/app/knowledge/',
+                    )
+                ),
             );
 }
