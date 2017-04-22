@@ -195,7 +195,7 @@ getCoordY:function(padding,yPixel,value,minY){
           },//纵坐标X 随ptindex 获得(注意 纵坐标的算法是倒着的因为原点在最上面)
 getYPixel:function(minY, maxY,height,padding){
 //              var ycount = (parseInt((maxY - minY)/10)+1)*10+10;//y轴最大值
-              var ycount = 2;//y轴最大值
+              var ycount = 3;//y轴最大值
               return {pixel:(height-padding)/ycount,ycount:ycount};
           },//y轴的单位长度
 
