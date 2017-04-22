@@ -20,6 +20,10 @@ foreach($hour as $key => $value){
 $price_arr = trim($price_arr, ',');
 $price_arr .= ']';
 
+arsort($hour);
+reset($hour);
+$max = round(current($hour), 2);
+$min = round(end($hour), 2);
 ?>
 
 <!Doctype Html>
@@ -38,7 +42,9 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-35
 <a href="/goldinfo/price/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a><?php echo $date?></a>&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/goldinfo/price/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br><br><br>
+<a>最大值：<?php echo $max?></a><br>
+<a>最小值：<?php echo $min?></a><br>
 <script>
 window.onload = function(){
 
