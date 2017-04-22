@@ -45,6 +45,7 @@ $min = round(end($hour), 2);
 body{background-color:#bfd0c4;}
 a{font-size: 200%;}
 form{font-size: 200%; position:absolute;top:95%;left:50%;margin-left:-450px;margin-top:-300px;}
+span{font-size: 200%; position:absolute;top:100%;left:50%;margin-left:-450px;margin-top:-300px;}
 canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-450px;margin-top:-300px;box-shadow: 3px 3px 3px #7e7a7c;}
 </style>
 </head>
