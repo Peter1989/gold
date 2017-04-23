@@ -27,10 +27,10 @@ $list_out = rtrim($list, '<span>');
 <!Doctype Html>
 <html>
 <head>
-<title></title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <style>
 body{background-color:#bfd0c4;}
+span{font-size:200%;}
 </style>
 </head>
 <body>
