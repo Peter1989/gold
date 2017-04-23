@@ -52,7 +52,6 @@ function bootstrap(){
     if(!file_exists($_INVOKING_FILE_)){
         var_dump('file not exist');exit;
     }
-
     $invoke_func = function() use ($_INVOKING_FILE_){
         require_once($_INVOKING_FILE_);
     };

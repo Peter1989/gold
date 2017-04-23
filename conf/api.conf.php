@@ -7,7 +7,7 @@ class APIConf{
                     'access' => array('GET'),
                     'map_file' => '/app/index.php',
                     'map_var' => array(),
-                )
+                ),
             ),
             //gold
             '/goldi' => array(
@@ -17,8 +17,13 @@ class APIConf{
                     'map_var' => array(
                         1 => 'date',
                         ),
-                    )
+                    ),
+                '/goldinfo/income/record' => array(
+                    'access' => array('GET'),
+                    'map_file' => '/app/goldinfo/income/record/index.php',
+                    'map_var' => array(),
                 ),
+            ),
             //knowledge
             'knowle' => array(
                 '/knowledge/update/(\d+)' => array(

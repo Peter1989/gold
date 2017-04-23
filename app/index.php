@@ -11,5 +11,6 @@ a {font-size: 200%}
 </style>
 </head>
 <body>
-<a href="/goldinfo/price/date/<?php echo $date?>">当日金价</a>
+<a href="/goldinfo/price/date/<?php echo $date?>">当日金价</a><br>
+<a href="/goldinfo/income/record">盈亏记录</a><br>
 </body>
