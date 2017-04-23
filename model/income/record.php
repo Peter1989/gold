@@ -12,6 +12,14 @@ class RecordModel{
         $res = $mysql->query($sql);
         return $res;
     }
+
+    public function set_income_records($uid, $increase, $amount){
+        $gold_mysql = new Gold_mysql();
+        $mysql = $gold_mysql->get_gold_mysql();
+        $date = date('Y-m-d H:i:s');
+        $sql = "insert into record (uid, increase, amount, timestamp) values ($uid, '$increase', $amount, '$date')";
+        $res = $mysql->query($sql);
+    }
 }
 
 ?>

@@ -12,6 +12,12 @@ class RecordData{
         }
         return $data;
     }
+
+    public function set_income_records($uid, $increase, $amount){
+        $gold_model = new RecordModel();
+        $amount = round($amount, 2);
+        $gold_model->set_income_records($uid, $increase, $amount);
+    }
 }
 
 ?>
