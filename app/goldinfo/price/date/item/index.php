@@ -26,7 +26,6 @@ $price_arr = '[';
 foreach($hour as $key => $value){
     $price_arr .= '{x:'.$key.',y:'.$value.'},';
 }
-
 $price_arr = trim($price_arr, ',');
 $price_arr .= ']';
 
@@ -34,7 +33,9 @@ arsort($hour);
 reset($hour);
 $max = round(current($hour), 2);
 $min = round(end($hour), 2);
+$last_num = round($value, 2);
 ?>
+
 
 <!Doctype Html>
 <html>
@@ -58,6 +59,7 @@ canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-45
 <a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
 <a>最大值：<?php echo $max?></a><br>
 <a>最小值：<?php echo $min?></a><br>
+<a>最新值：<?php echo $last_num?></a><br>
 
 <span>当前提醒状态：<?php echo $statement?></span>
 
@@ -217,8 +219,7 @@ getCoordY:function(padding,yPixel,value,minY){
               return this.can.height-padding-y;
           },//纵坐标X 随ptindex 获得(注意 纵坐标的算法是倒着的因为原点在最上面)
 getYPixel:function(minY, maxY,height,padding){
-//              var ycount = (parseInt((maxY - minY)/10)+1)*10+10;//y轴最大值
-              var ycount = 3;//y轴最大值
+              var ycount = parseInt(maxY - minY) + 1;//y轴最大值
               return {pixel:(height-padding)/ycount,ycount:ycount};
           },//y轴的单位长度
 
