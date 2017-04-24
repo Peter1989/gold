@@ -13,11 +13,11 @@ class RecordModel{
         return $res;
     }
 
-    public function set_income_records($uid, $increase, $amount){
+    public function set_income_records($uid, $increase, $amount, $reason){
         $gold_mysql = new Gold_mysql();
         $mysql = $gold_mysql->get_gold_mysql();
         $date = date('Y-m-d H:i:s');
-        $sql = "insert into record (uid, increase, amount, timestamp) values ($uid, '$increase', $amount, '$date')";
+        $sql = "insert into record (uid, increase, amount, timestamp, reason) values ($uid, '$increase', $amount, '$date', '$reason')";
         $res = $mysql->query($sql);
     }
 }

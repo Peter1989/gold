@@ -8,9 +8,10 @@ $record_data = new RecordData();
 if(isset($_REQUEST['radio1']) && isset($_REQUEST['amount'])){
     $increase = trim($_REQUEST['radio1']);
     $amount = trim($_REQUEST['amount']);
+    $reason = trim($_REQUEST['reason']);
     $uid = 1;
     if(!empty($amount) && is_numeric($amount)){
-        $record_data->set_income_records($uid, $increase, $amount); 
+        $record_data->set_income_records($uid, $increase, $amount, $reason); 
     }
 }
 
@@ -27,7 +28,7 @@ foreach($res as $v){
         $sum -= $v['amount'];
     }
 
-    $list .= $v['timestamp'].'&nbsp;&nbsp;'.$change.'&nbsp;&nbsp;'.$v['amount'].'元</span><br><span>'; 
+    $list .= $v['timestamp'].'&nbsp;&nbsp;'.$change.'&nbsp;&nbsp;'.$v['amount'].'元&nbsp;原因：'.$v['reason'].'</span><br><span>'; 
 }
 
 $list_out = rtrim($list, '<span>'); 
@@ -49,7 +50,8 @@ a{font-size:150%;}
 <form id='form1' action="" method='post'>
 收入<input style="width:30px;height:20px" type='radio' value='1' name='radio1'/>&nbsp;&nbsp;&nbsp;&nbsp;
 亏损<input style="width:30px;height:20px" type='radio' value='0' name='radio1'/><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<input id="t" style="width:70px;height:20px" type='text' name='amount' value=''/>
+金额&nbsp;&nbsp;&nbsp;&nbsp;<input id="t" style="width:70px;height:20px" type='text' name='amount' value=''/><br>
+原因&nbsp;&nbsp;&nbsp;&nbsp;<input style="width:150px;height:20px" type='text' name='reason' value=''/>
 &nbsp;&nbsp;&nbsp;&nbsp;<input style="width:70px;height:25px" type='button' value="Submit" onClick="form1.submit();form1.reset();"/>
 </form>
 <br>
