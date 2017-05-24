@@ -10,30 +10,34 @@ $res = require_once($inform_path);
 $inform_data = new InformData();
 if(isset($_REQUEST['radio1'])){
     $status = trim($_REQUEST['radio1']);
-    $inform_data->set_inform_status($status);
+    $inform_data->set_inform_trend($status);
+
+    if($status == 'raise'){
+       $price_now = $inform_data->get_price_now(); 
+       $price_limit = $price_now - 0.9;
+       $inform_data->set_price_limit($price_limit);
+    }
+
+    if($status == 'drop'){
+        $price_now = $inform_data->get_price_now();
+        $price_limit = $price_now + 0.9;
+        $inform_data->set_price_limit($price_limit);
+    }
+
+    if($status == 'off'){
+        $price_limit = 0;
+        $inform_data->set_price_limit($price_limit);
+    }
 }
 
-$statement = $inform_data->get_inform_statement();
-
-$hour = array();
-$handle = fopen($home."/mysite/data/gold/$date/hour_average", 'r');
-while($price = fgets($handle)){
-    $index_price = explode(' ', $price);
-    $hour[$index_price[0]] = $index_price[1];
+if(isset($_REQUEST['radio2'])){
+    $status = trim($_REQUEST['radio2']);
+    $inform_data->set_inform_limit($status);
 }
 
-$price_arr = '[';
-foreach($hour as $key => $value){
-    $price_arr .= '{x:'.$key.',y:'.$value.'},';
-}
-$price_arr = trim($price_arr, ',');
-$price_arr .= ']';
-
-arsort($hour);
-reset($hour);
-$max = round(current($hour), 2);
-$min = round(end($hour), 2);
-$last_num = round($value, 2);
+$trend = $inform_data->get_inform_trend();
+$price_limit = $inform_data->get_price_limit();
+$inform_limit = $inform_data->get_inform_limit(); 
 ?>
 
 
@@ -44,250 +48,21 @@ $last_num = round($value, 2);
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <style>
 body{background-color:#bfd0c4;}
-a{font-size: 200%;}
-form{font-size: 200%; position:absolute;top:95%;left:50%;margin-left:-450px;margin-top:-300px;}
-span{font-size: 200%; position:absolute;top:100%;left:50%;margin-left:-450px;margin-top:-300px;}
-canvas{background-color:white;position:absolute;top:50%;left:50%;margin-left:-450px;margin-top:-300px;box-shadow: 3px 3px 3px #7e7a7c;}
 </style>
 </head>
 <body>
-<canvas width="900" height="600" id="canvas"></canvas>
 <br>
-<a href="/goldinfo/price/date/<?php echo $date_before?>">前日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a><?php echo $date?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/goldinfo/price/date/<?php echo $date_after?>">后日金价</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/">回到首页</a>&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
-<a>最大值：<?php echo $max?></a><br>
-<a>最小值：<?php echo $min?></a><br>
-<a>最新值：<?php echo $last_num?></a><br>
 
-<span>当前提醒状态：<?php echo $statement?></span>
-
+<span>当前提醒状态：<?php echo $trend?></span>&nbsp;&nbsp;
+<span>当前止损位：<?php echo $price_limit?></span>&nbsp;&nbsp;
+<span>止损位变化是否提醒：<?php echo $inform_limit?></span><br>
 <form id="inform" action="" method="get">
-    金价上升提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="1"/>&nbsp;&nbsp;  
-    金价下降提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="0"/>&nbsp;&nbsp;
-    关闭提醒<input style="width:50px;height:30px" type="radio" name="radio1" value="2"/>&nbsp;&nbsp;
+    上升入仓<input style="width:50px;height:30px" type="radio" name="radio1" value="raise"/>&nbsp;&nbsp;  
+    下降入仓<input style="width:50px;height:30px" type="radio" name="radio1" value="drop"/>&nbsp;&nbsp;
+    平仓<input style="width:50px;height:30px" type="radio" name="radio1" value="off"/><br>
+    止损位变化提醒<input style="width:50px;height:30px" type="radio" name="radio2" value="on"/>&nbsp;&nbsp;
+    止损位变化不提醒<input style="width:50px;height:30px" type="radio" name="radio2" value="off"/><br><br>
     <input style="width:40px;height:40px" type="submit" value="Submit">提交</input>
 </form>
-<script>
-window.onload = function(){
-
-    var multiData = {values:[
-        { value0:<?php echo $price_arr?>},
-            /*
-            { value1:[
-                {x:"Jan",y:50},
-                {x:"Feb",y:40},
-                {x:"Mar",y:60},
-                {x:"Apr",y:10},
-                {x:"May",y:20},
-                {x:"Jun",y:10},
-                {x:"Jul",y:40},
-                {x:"Aug",y:10}
-                ]}
-                */
-                ]   
-    }//必须按照这个格式定义数据，关键字values value0 value1 ...... 
-    /*
-     *@param0: canvas 的id
-     *@param1: json 数据
-     *@param2: 坐标距离画布的间隙padding
-     *@param3: 如果只有一条数据时数据的颜色，多条数据颜色随机
-     *@param4: 点的颜色
-     *@param5: 是否绘制背景线
-     *@param6: 是否是多条数据
-     */
-    //先定义数据线的名字，再绘制数据
-    LineChart.setKey(["<?php echo $date?>","2014"]);
-    LineChart.setData("canvas",multiData,60,"red","#333",true,true);
-}
-
-var LineChart={
-    keynames:[],//数据信息数组
-    can:undefined,
-    ctx:undefined,
-    width:undefined,
-    lineColor:undefined,
-    dotColor:undefined,
-    isBg:false,
-    isMultiData:false,
-setData:function(canId,data,padding,lineColor,dotColor,isBg,isMultiData){
-             this.lineColor = lineColor;
-             this.dotColor = dotColor;
-             this.can = document.getElementById(canId);
-             this.ctx = this.can.getContext("2d");
-             this.isBg = isBg;
-             this.isMultiData = isMultiData;
-             this.drawXY(data,0,padding,this.can);
-         },
-
-isMultiData:function(data){
-                if(data.values.length>1){
-                    this.isMultiData = true;
-                }
-            },//是否是多条数据线
-
-drawXY:function(data,key,padding,can){
-           this.ctx.lineWidth="4";
-           this.ctx.strokeStyle="black";
-           this.ctx.font = 'italic 15px sans-serif';
-           this.ctx.beginPath();
-           this.ctx.moveTo(padding,0)
-           this.ctx.lineTo(padding,can.height-padding);
-           this.ctx.lineTo(can.width,can.height-padding);
-           this.ctx.stroke();
-           var perwidth = this.getPixel(data,key,can.width,padding);//x 轴每一个数据占据的宽度
-           var maxY =  this.getMax(data,0,this.isMultiData);//获得Y轴上的最大值
-           var minY = this.getMin(data, 0, this.isMultiData);
-           var yPixel = this.getYPixel(minY,maxY,can.height,padding).pixel;
-           var ycount = this.getYPixel(minY,maxY,can.height,padding).ycount;
-           for( var i=0,ptindex;i< data.values[key]["value"+key].length;i++ ){
-               ptindex = i+1;
-               var x_x = this.getCoordX(padding,perwidth,ptindex);
-               var x_y = can.height-padding+20;
-               this.ctx.fillText(data.values[key]["value"+key][i].x,x_x,x_y,perwidth);
-           }
-           this.ctx.textAlign = "right"//y轴文字靠右写
-           this.ctx.textBaseline = "middle";//文字的中心线的调整
-           for(var i=0;i< ycount/10;i++){
-               this.ctx.fillText(i*10,padding-10,(ycount/10-i)*10*yPixel,perwidth);
-           }
-           if(this.isBg){
-               var x =  padding;
-               this.ctx.lineWidth="1";
-               this.ctx.strokeStyle="#e8e8e8";
-               for( var i=0;i< ycount/10;i++ ){
-                   var y = (ycount/10-i)*10*yPixel;
-                   this.ctx.moveTo(x,y);
-                   this.ctx.lineTo(can.width,y);
-                   this.ctx.stroke();
-               }
-           }//选择绘制背景线
-           this.ctx.closePath();
-           this.drawData(data,0,padding,perwidth,yPixel,this.isMultiData,minY);
-       },//绘制XY坐标 线 以及点
-
-drawData:function(data,key,padding,perwidth,yPixel,isMultiData,minY,lineColor){
-             if(!isMultiData){
-                 var keystr = "value"+key;
-                 this.ctx.beginPath();
-                 this.ctx.lineWidth="2";
-                 if(arguments[6]){
-                     this.ctx.strokeStyle=lineColor;
-                 }else{
-                     this.ctx.strokeStyle=this.lineColor;
-                 }
-                 var startX = this.getCoordX(padding,perwidth,0);
-                 var startY = this.getCoordY(padding,yPixel,data.values[key][keystr][0].y,minY);
-                 this.ctx.beginPath();
-                 this.ctx.lineWidth="2";
-                 for( var i=0;i< data.values[key][keystr].length;i++ ){
-                     var x = this.getCoordX(padding,perwidth,i+1);
-                     var y = this.getCoordY(padding,yPixel,data.values[key][keystr][i].y,minY);
-                     this.ctx.lineTo(x,y);
-                 }
-                 this.ctx.stroke();
-                 this.ctx.closePath();
-                 /*下面绘制数据线上的点*/
-                 this.ctx.beginPath();
-                 this.ctx.fillStyle=this.dotColor;
-                 for( var i=0;i< data.values[key][keystr].length;i++ ){
-                     var x = this.getCoordX(padding,perwidth,i+1);
-                     var y = this.getCoordY(padding,yPixel,data.values[key][keystr][i].y,minY);
-                     this.ctx.moveTo(x,y);
-                     this.ctx.arc(x,y,3,0,Math.PI*2,true);//绘制数据线上的点
-                     this.ctx.fill();
-                 }
-                 this.ctx.closePath();
-             }else{//如果是多条数据线
-                 for( var i=0;i< data.values.length;i++ ){
-                     var color = "rgb("+parseInt(Math.random()*256)+","+parseInt(Math.random()*256)+","+parseInt(Math.random()*256)+")";
-                     LineChart.drawData(data,i,padding,perwidth,yPixel,false,minY,color);
-                     LineChart.drawKey(color,this.keynames[i],padding,i);
-                 }
-             }
-         },//绘制数据线和数据点
-getPixel:function(data,key,width,padding){
-             var count = data.values[key]["value"+key].length;
-             return (width-20-padding)/(count+(count-1)*1.5);  
-         },//宽度
-getCoordX:function(padding,perwidth,ptindex){//下标从1开始 不是从0开始
-              return 2.5*perwidth*ptindex+padding+10-2*perwidth;
-          },//横坐标X 随ptindex 获得
-getCoordY:function(padding,yPixel,value,minY){
-              var y = yPixel*(value - minY);
-              return this.can.height-padding-y;
-          },//纵坐标X 随ptindex 获得(注意 纵坐标的算法是倒着的因为原点在最上面)
-getYPixel:function(minY, maxY,height,padding){
-              var ycount = parseInt(maxY - minY) + 1;//y轴最大值
-              return {pixel:(height-padding)/ycount,ycount:ycount};
-          },//y轴的单位长度
-
-getMax:function(data,key,isMultiData){
-           if(!isMultiData){
-               var maxY = data.values[key]["value"+key][0].y;
-               var length = data.values[key]["value"+key].length;
-               var keystr = "value"+key;
-               for( var i=1;i< length;i++ ){
-                   if(maxY< data.values[key][keystr][i].y) maxY=data.values[key][keystr][i].y;
-               }
-               return maxY;//返回最大值 如果不是多数据
-           }else{
-               var maxarr=[];
-               var count = data.values.length;//多条数据的数据长度
-               for(var i=0;i< count;i++){
-                   maxarr.push(LineChart.getMax(data,i,false));
-               }
-               var maxvalue = maxarr[0];
-               for(var i=1;i< maxarr.length;i++){
-                   maxvalue = (maxvalue< maxarr[i])?maxarr[i]:maxvalue; 
-               }
-               return maxvalue;
-           }//如果是多数据
-       },
-
-getMin:function(data, key, isMultiData){
-        if(!isMultiData){
-            var minY = data.values[key]["value"+key][0].y;
-            var length = data.values[key]["value"+key].length;
-            var keystr = "value"+key;
-            for(var i = 1; i < length; i++){
-                if(minY > data.values[key][keystr][i].y) minY=data.values[key][keystr][i].y;
-            }
-            return minY;
-        }else{
-            var minarr = [];
-            var count = data.values.length;
-            for(var i = 0; i < count; i++){
-                minarr.push(LineChart.getMin(data, i, false));
-            }
-            var minvalue = minarr[0];
-            for(var i = 1; i < minarr.length; i++){
-                minvalue = (minvalue > minarr[i]) ? minarr[i] : minvalue;
-            }
-            return minvalue;
-        }
-},
-
-setKey:function(keynames){//keynames 是数组
-           for(var i=0;i< keynames.length;i++){
-               this.keynames.push(keynames[i]);//存入数组中
-           }
-       },
-
-drawKey:function(color,keyname,padding,lineindex){
-            var x = padding+10;
-            var y = this.can.height - padding+20+13*(lineindex+1);
-            this.ctx.beginPath();
-            this.ctx.strokeStyle = color;
-            this.ctx.font="10px";
-            this.ctx.moveTo(x,y);
-            this.ctx.lineTo(x+50,y);
-            this.ctx.fillText(":"+keyname,x+80,y,30);
-            this.ctx.stroke();
-            this.ctx.closePath();
-        }   
-}
-</script>
 </body>
 </html>

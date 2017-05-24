@@ -5,29 +5,48 @@ $lib_dir = $home.'/mysite/gold/lib/redis.lib.php';
 require_once($lib_dir);
 
 class InformModel{
-        public function get_last_price(){
-            $gold_redis = new Gold_redis();
-            $redis = $gold_redis->get_gold_redis();
-            $last_price = $redis->GET('last_gold_price');
-            return $last_price;
-        }
 
-        public function insert_last_price($price){
-            $gold_redis = new Gold_redis();
-            $redis = $gold_redis->get_gold_redis();
-            $redis->SET('last_gold_price', $price);
-        }
+    public function get_price_now(){
+        $redis =  Gold_redis::get_instance();
+        $price = $redis->GET('price_now');
+        return $price;
+    }
 
-        public function if_raise_inform(){
-            $gold_redis = new Gold_redis();
-            $redis = $gold_redis->get_gold_redis();
-            $raise_inform = $redis->GET('raise_inform');
-            return $raise_inform; 
-        }
+    public function set_price_now($price){
+        $redis = Gold_redis::get_instance();
+        $redis->SET('price_now', "$price");
+    }
 
-        public function set_inform_status($status){
-            $gold_redis = new Gold_redis();
-            $redis = $gold_redis->get_gold_redis();
-            $redis->SET('raise_inform', $status);
-        }
+    public function get_price_limit(){
+        $redis =  Gold_redis::get_instance();
+        $price_limit = $redis->GET('price_limit');
+        return $price_limit;
+    }
+
+    public function set_price_limit($price){
+        $redis = Gold_redis::get_instance();
+        $redis->SET('price_limit', "$price");
+    }
+
+    public function get_inform_trend(){
+        $redis = Gold_redis::get_instance();
+        $raise_inform = $redis->GET('inform_trend');
+        return $raise_inform;
+    }
+
+    public function set_inform_trend($status){
+        $redis = Gold_redis::get_instance();
+        $redis->SET('inform_trend', "$status");
+    }
+
+    public function get_inform_limit(){
+        $redis = Gold_redis::get_instance();
+        $raise_inform = $redis->GET('inform_limit');
+        return $raise_inform;
+    }
+
+    public function set_inform_limit($status){
+        $redis = Gold_redis::get_instance();
+        $redis->SET('inform_limit', "$status");
+    }
 }

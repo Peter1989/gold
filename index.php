@@ -14,6 +14,7 @@ function bootstrap(){
     
     $script_uri = preg_replace('/\?.*$/', '', $_SERVER['REQUEST_URI']);
     $api_prefix = substr($script_uri, 0, 6);
+
     if(!isset(APIConf::$CONF[$api_prefix])){
         var_dump('url wrong');exit;
     }
@@ -26,7 +27,6 @@ function bootstrap(){
         $matched = true;
         break;
     }
-
     if(!$matched){
         var_dump('url wrong');exit;
     }
@@ -49,6 +49,7 @@ function bootstrap(){
     }
 
     $_INVOKING_FILE_ = __DIR__ . $_INVOKING_FILE_;
+
     if(!file_exists($_INVOKING_FILE_)){
         var_dump('file not exist');exit;
     }
